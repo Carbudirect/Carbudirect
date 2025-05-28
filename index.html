@@ -36,6 +36,23 @@
             body { padding: 10px; }
             .station { padding: 10px; margin: 10px 5px; }
         }
+            .scroll-top {
+            display: none;
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+        .scroll-top:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 <body>
@@ -145,6 +162,16 @@
 
     <div id="results"></div>
 
+    <div style="text-align: center; margin: 20px 0;">
+        <label for="carburant">Filtrer par carburant :</label>
+        <select id="carburant">
+            <option value="all">Tous</option>
+            <option value="prix_gazole">Gazole</option>
+            <option value="prix_sp95">SP95</option>
+            <option value="prix_e85">E85</option>
+        </select>
+    </div>
+
     <div style="text-align: center;">
         <button class="share-button" onclick="shareSite()">Partager ce site</button>
     </div>
@@ -155,7 +182,12 @@
             const res = await fetch('https://data.economie.gouv.fr/explore/dataset/prix-carburants-fichier-instantane/download?format=json');
             const data = await res.json();
 
-            const results = data.filter(station => station.fields.dep_code === dep);
+            const selectedFuel = document.getElementById('carburant').value;
+            const results = data.filter(station => {
+                const matchDep = station.fields.dep_code === dep;
+                if (selectedFuel === 'all') return matchDep;
+                return matchDep && station.fields[selectedFuel];
+            });
             const container = document.getElementById('results');
             container.innerHTML = '';
 
@@ -193,5 +225,21 @@
     <footer style="text-align: center; margin-top: 30px;">
         ©2025 Comparateur Carburants France
     </footer>
+    <button class="scroll-top" id="scrollTopBtn" onclick="scrollToTop()">↑ Haut</button>
+
+    <script>
+        window.onscroll = function() {
+            const btn = document.getElementById("scrollTopBtn");
+            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                btn.style.display = "block";
+            } else {
+                btn.style.display = "none";
+            }
+        };
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
 </body>
 </html>
