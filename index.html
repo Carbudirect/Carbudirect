@@ -1,10 +1,17 @@
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+    <!-- SEO + Réseaux sociaux -->
+    <meta property="og:title" content="Comparateur Carburants France" />
+    <meta property="og:description" content="Trouvez le carburant le moins cher dans votre département, avec des données officielles mises à jour toutes les 10 minutes." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://carbudirect.github.io/Carbudirect/" />
+    <meta property="og:image" content="https://carbudirect.github.io/Carbudirect/og-image.png" />
+    <meta name="twitter:card" content="summary" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Comparateur Prix Carburants en France</title>
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
     <meta name="description" content="Trouvez facilement le carburant le moins cher dans votre département grâce à notre comparateur automatique actualisé toutes les 10 minutes.">
     <style>
         body { font-family: Arial, sans-serif; margin: 0; padding: 20px; background: #f4f4f4; }
@@ -12,6 +19,23 @@
         select, button { padding: 10px; font-size: 1em; }
         .station { background: #fff; padding: 15px; margin: 10px auto; max-width: 600px; box-shadow: 0 2px 5px rgba(0,0,0,0.2); border-radius: 5px; }
         .price { font-weight: bold; }
+            .share-button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        .share-button:hover {
+            background: #0056b3;
+        }
+        @media (max-width: 600px) {
+            body { padding: 10px; }
+            .station { padding: 10px; margin: 10px 5px; }
+        }
     </style>
 </head>
 <body>
@@ -121,6 +145,10 @@
 
     <div id="results"></div>
 
+    <div style="text-align: center;">
+        <button class="share-button" onclick="shareSite()">Partager ce site</button>
+    </div>
+
     <script>
         async function fetchData() {
             const dep = document.getElementById('departement').value;
@@ -148,6 +176,17 @@
                 `;
                 container.appendChild(div);
             });
+        }
+            function shareSite() {
+            if (navigator.share) {
+                navigator.share({
+                    title: 'Comparateur Carburants France',
+                    text: 'Trouvez les prix des carburants en temps réel dans votre département.',
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                alert('Le partage automatique n’est pas supporté par votre navigateur.');
+            }
         }
     </script>
 
